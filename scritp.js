@@ -5,7 +5,7 @@ const maxWidht = canvas.clientWidth
 canvas.width = maxWidht
 canvas.height = maxHeight
 const ctx = canvas.getContext('2d')
-const maxAxisSpeed = 2
+const maxAxisSpeed = 3
 const minDistance = 100; 
 const approximation = 1;
 const slowAnchorDistance = 30
@@ -80,7 +80,7 @@ function updatePoints(points, maxHeight, maxWidht){
     const distanceFromMainAnchor = getDistanceBetween2Points(points[anchorIndex], mainAnchor) 
     let newSpeed;
     if(distanceFromMainAnchor < slowAnchorDistance){
-        newSpeed = 0.1 + distanceFromMainAnchor / slowAnchorDistance * maxAxisSpeed
+        newSpeed = 0.5 + distanceFromMainAnchor / slowAnchorDistance * maxAxisSpeed
     } else {
         newSpeed = maxAxisSpeed
     }
