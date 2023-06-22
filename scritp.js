@@ -5,9 +5,10 @@ const maxWidht = canvas.clientWidth
 canvas.width = maxWidht
 canvas.height = maxHeight
 const ctx = canvas.getContext('2d')
-const maxAxisSpeed = 7
+const maxAxisSpeed = 2
 const minDistance = 100; 
 const approximation = 1;
+const slowAnchorDistance = 30
 
 ctx.fillStyle = "cyan";
 ctx.clientWidth = 5;
@@ -33,6 +34,11 @@ const frogPoints = [
     [230, 481],
     [280, 481]
 ]
+const anchorIndex = 13
+const mainAnchor = {
+    x: frogPoints[anchorIndex][0],
+    y: frogPoints[anchorIndex][1],
+}
 const length = frogPoints.length
 for(let i = 0; i < length; i++){
     const updatedPoint = []
@@ -48,18 +54,20 @@ console.log(frogPoints)
 const pointsArray = [];
 for(let i = 0; i < frogPoints.length; i++){
     const point = {}
-    const xDir = Math.round(Math.random()) == 0 ? -1 : 1
-    const yDir = Math.round(Math.random()) == 0 ? -1 : 1
+    let xDir = Math.round(Math.random()) == 0 ? -1 : 1
+    let yDir = Math.round(Math.random()) == 0 ? -1 : 1
     point.x = frogPoints[i][0]
     point.y = frogPoints[i][1]
     // point.vy = (Math.random() * maxAxisSpeed) * yDir
     // point.vx = (Math.random() * maxAxisSpeed) * xDir 
-    point.vy = 2 * yDir
-    point.vx = 2 * xDir 
-    // point.vy = 0
+    point.vy = maxAxisSpeed * yDir
+    point.vx = maxAxisSpeed * xDir 
     // point.vx = 0
+    // point.vy = 0
     pointsArray.push(point)
 }
+pointsArray[anchorIndex].vx = maxAxisSpeed
+pointsArray[anchorIndex].vy = maxAxisSpeed
 
 console.log(pointsArray)
 
@@ -69,8 +77,17 @@ console.log(pointsArray)
 // }    
 
 function updatePoints(points, maxHeight, maxWidht){
+    const distanceFromMainAnchor = getDistanceBetween2Points(points[anchorIndex], mainAnchor) 
+    let newSpeed;
+    if(distanceFromMainAnchor < slowAnchorDistance){
+        newSpeed = 0.1 + distanceFromMainAnchor / slowAnchorDistance * maxAxisSpeed
+    } else {
+        newSpeed = maxAxisSpeed
+    }
     for(let i = 0; i < points.length; i++){
         const point = points[i]
+        point.vx = point.vx > 0 ? newSpeed : -newSpeed
+        point.vy = point.vy > 0 ? newSpeed : -newSpeed
         point.x = point.x + point.vx
         point.y = point.y + point.vy
         if(point.x > maxWidht) {
