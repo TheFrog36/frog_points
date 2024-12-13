@@ -143,7 +143,8 @@ function calculateLines(points){
                 const dum = pointsDistance / minDistance
                 const width = 3 - dum * 3
                 const green = 255 - Math.floor(dum * 255)
-                const color = `rgba(${green},${green},255, ${dum})`
+                // const color = `rgba(${green},${green},255, ${dum})`
+                const color = `rgba(40,${green},40, ${dum})`
                 // const color = `rgba(255, 255, 255, ${dum})`
                 drawLine(ctx, [p1.x, p1.y], [p2.x, p2.y], color, width);
             }
